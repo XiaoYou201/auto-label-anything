@@ -32,6 +32,6 @@ def start_receive_data():
             print(msg)
             videoPath = str(msg.value)[2:-1]
             print("received video path is :" + videoPath)
-            box_list = pic_detect.get_label_box(get_per_frame.get_video_frame(videoPath), 'a person')
-            seg_video.mask_video(get_per_frame.get_video_frame(videoPath), box_list, batch_size=2,
+            box_list = pic_detect.get_label_box(get_frames.get_video_frame(videoPath), 'a person')
+            seg_video.mask_video(get_frames.get_video_frame(videoPath), box_list, batch_size=2,
                                  save_path=common.ANNOTQTIONS_PATH)
