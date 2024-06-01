@@ -1,8 +1,12 @@
+import os
+
 import cv2
 import torch
 import imageio.v3 as iio
 from PIL import Image
 import numpy
+
+import common.common
 
 
 def get_video_frame(video: str):
@@ -16,8 +20,12 @@ def get_video_frame(video: str):
         ret, frame = videoCapture.read()
         frame =cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
         videoFrames.append(frame)
-
-    print(len(videoFrames))
+        file_name = os.path.basename(video)
+        file_name_without_extension = os.path.splitext(file_name)[0]
+        pic_save_path = os.path.join(common.common.PIC_SAVE_PATH_BASE+file_name_without_extension, f'frame_{i:04d}.png')
+        # print(pic_save_path)
+        cv2.imwrite(pic_save_path, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))  # 保存为图像文件，转换回BGR
+    print('The size of frames are ' + str(len(videoFrames)))
     return videoFrames
 # get_video_frame("../videos/test.mp4")
 def get_video_from_bytes(msg_bytes: bytes):

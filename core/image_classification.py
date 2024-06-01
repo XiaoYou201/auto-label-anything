@@ -9,7 +9,7 @@ detector = pipeline(model=checkpoint, task="zero-shot-object-detection")
 labels_set = ["human face", "rocket", "nasa badge", "star-spangled banner", "apple", "banana", "chair", "a bird"]
 
 
-def get_labels_from_image(img):#
+def get_labels_from_image(img):  #
     labels = []
     predictions = detector(
         img,
@@ -36,18 +36,19 @@ def get_label_list_from_video(video):
     return label_list
 
 
-def get_label_box(frames, label: str):#图片是PIL的image类型
+def get_label_box(frames: list, label: str):  # 图片是PIL的image类型
     box_list = []
-    length = len(frames)
-    for i in range(length):
-        img = Image.fromarray(frames[i])
+    for index, frame in enumerate(frames):
+        img = Image.fromarray(frame)
         predictions = detector(
             img,
             candidate_labels=[label],
         )
+        if len(predictions) == 0:
+            box_list.append(box_list[len(box_list)-1])
         for prediction in predictions:
             box = prediction["box"]
-            label = prediction["label"]
+            # label = prediction["label"]
             xmin, ymin, xmax, ymax = box.values()
             box_list.append([xmin, ymin, xmax, ymax])
             # print(box_list)
